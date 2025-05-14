@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import MobileNavigation from "./MobileNavigation";
 import { Theme } from "./Theme";
+
 
 const Navbar = () => {
   return (
@@ -15,7 +17,7 @@ const Navbar = () => {
         />
 
         <p className="h2-bold font-space-grotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          Dev<span className="text-primary-500">Flow</span>
+          Dev<span className="text-primary-500">Community</span>
         </p>
       </Link>
 
@@ -23,6 +25,7 @@ const Navbar = () => {
 
       <div className="flex-between gap-5">
         <Theme />
+        <MobileNavigation />
       </div>
     </nav>
   );
