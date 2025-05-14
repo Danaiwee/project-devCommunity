@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -36,13 +37,13 @@ const questions = [
 ];
 
 interface SeachParams {
-  searchParams: Promise<{[key: string]: string}>
+  searchParams: Promise<{ [key: string]: string }>;
 }
 
-const Home = async ({searchParams}: SeachParams) => {
-  const {query = ""} = await searchParams;
+const Home = async ({ searchParams }: SeachParams) => {
+  const { query = "" } = await searchParams;
 
-  const filterQuestions = questions.filter((question) => 
+  const filterQuestions = questions.filter((question) =>
     question.title.toLowerCase().includes(query?.toLowerCase())
   );
 
@@ -68,13 +69,13 @@ const Home = async ({searchParams}: SeachParams) => {
         />
       </section>
 
-      <section>Home Filters</section>
+      <section className="mt-10">
+        <HomeFilters />
+      </section>
 
       <section className="mt-10 flex w-full flex-col gap-6">
         {filterQuestions.map((question) => (
-          <h1 key={question._id}>
-            {question.title}
-          </h1>
+          <h1 key={question._id}>{question.title}</h1>
         ))}
       </section>
     </>
