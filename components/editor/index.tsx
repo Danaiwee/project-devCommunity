@@ -92,7 +92,7 @@ const Editor = ({ editorRef, value, fieldChange, ...props }: Props) => {
                 },
                 {
                   fallback: () => (
-                    <div className="flex">
+                    <div className="flex flex-wrap">
                       <UndoRedo />
                       <Separator />
 
