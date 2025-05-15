@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -9,30 +10,40 @@ const questions = [
   {
     _id: "1",
     title: "How to learn React?",
-    description: "I want to learn React, can anyone help me?",
+    content: "I want to learn React, can anyone help me?",
     tags: [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://static.vecteezy.com/system/resources/previews/024/183/525/non_2x/avatar-of-a-man-portrait-of-a-young-guy-illustration-of-male-character-in-modern-color-style-vector.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2024-04-07"),
   },
   {
     _id: "2",
     title: "How to learn JavaScript?",
-    description: "I want to learn JavaScript, can anyone help me?",
+    content: "I want to learn JavaScript, can anyone help me?",
     tags: [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image:
+        "https://png.pngtree.com/png-vector/20220817/ourmid/pngtree-women-cartoon-avatar-in-flat-style-png-image_6110776.png",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2023-05-15"),
   },
 ];
 
@@ -69,13 +80,13 @@ const Home = async ({ searchParams }: SeachParams) => {
         />
       </section>
 
-      <section className="mt-10">
+      <section className="mt-5">
         <HomeFilters />
       </section>
 
       <section className="mt-10 flex w-full flex-col gap-6">
         {filterQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </section>
     </>
