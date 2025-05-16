@@ -5,6 +5,8 @@ import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import handleError from "@/lib/handler/error";
+import { ValidationError } from "@/lib/http-error";
 
 const questions = [
   {
@@ -51,7 +53,22 @@ interface SeachParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
+const test = () => {
+  try {
+    throw new ValidationError({
+      title: ["Required"],
+      email: ["Incorrect pattern"]
+    })
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
 const Home = async ({ searchParams }: SeachParams) => {
+  const result = await test();
+
+  console.log(result);
+
   const { query = "" } = await searchParams;
 
   const filterQuestions = questions.filter((question) =>
