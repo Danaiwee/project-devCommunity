@@ -4,7 +4,7 @@ import Account from "@/database/account.model";
 import handleError from "@/lib/handler/error";
 import { NotFoundError, ValidationError } from "@/lib/http-error";
 import dbConnect from "@/lib/mongoose";
-import { AccountSchema } from "@/lib/validation";
+import { AccountSchema } from "@/lib/validations";
 import { APIErrorResponse } from "@/types/global";
 
 // Get Account by ID

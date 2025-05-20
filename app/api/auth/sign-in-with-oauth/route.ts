@@ -7,7 +7,7 @@ import User from "@/database/user.model";
 import handleError from "@/lib/handler/error";
 import { ValidationError } from "@/lib/http-error";
 import dbConnect from "@/lib/mongoose";
-import { SignInWithOAuthSchema } from "@/lib/validation";
+import { SignInWithOAuthSchema } from "@/lib/validations";
 import { APIErrorResponse } from "@/types/global";
 
 export async function POST(request: Request) {

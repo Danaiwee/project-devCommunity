@@ -1,3 +1,4 @@
+import ROUTES from "@/constants/routes";
 import { IAccount } from "@/database/account.model";
 import { IUser } from "@/database/user.model";
 
@@ -8,14 +9,15 @@ const API_BASE_URL =
 
 export const api = {
   auth: {
-    oAuthSignIn : ({
-      user, provider, providerAccountId
-    }: SignInWithOAuthParams) => (
-      fetchHandler(`${API_BASE_URL}/auth/sign-in-with-oauth`, {
+    oAuthSignIn: ({
+      user,
+      provider,
+      providerAccountId,
+    }: SignInWithOAuthParams) =>
+      fetchHandler(`${API_BASE_URL}/auth/${ROUTES.SIGN_IN_WITH_OAUTH}`, {
         method: "POST",
-        body: JSON.stringify({user, provider, providerAccountId})
-      })
-    )
+        body: JSON.stringify({ user, provider, providerAccountId }),
+      }),
   },
   users: {
     getAll: () => fetchHandler(`${API_BASE_URL}/users`),
@@ -36,18 +38,15 @@ export const api = {
         body: JSON.stringify(userData),
       }),
     delete: (id: string) =>
-      fetchHandler(`${API_BASE_URL}/users/${id}`, {
-        method: "DELETE",
-      }),
+      fetchHandler(`${API_BASE_URL}/users/${id}`, { method: "DELETE" }),
   },
-
   accounts: {
     getAll: () => fetchHandler(`${API_BASE_URL}/accounts`),
     getById: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`),
     getByProvider: (providerAccountId: string) =>
       fetchHandler(`${API_BASE_URL}/accounts/provider`, {
         method: "POST",
-        body: JSON.stringify(providerAccountId),
+        body: JSON.stringify({ providerAccountId }),
       }),
     create: (accountData: Partial<IAccount>) =>
       fetchHandler(`${API_BASE_URL}/accounts`, {
@@ -60,8 +59,6 @@ export const api = {
         body: JSON.stringify(accountData),
       }),
     delete: (id: string) =>
-      fetchHandler(`${API_BASE_URL}/accounts/${id}`, {
-        method: "DELETE",
-      }),
+      fetchHandler(`${API_BASE_URL}/accounts/${id}`, { method: "DELETE" }),
   },
 };
