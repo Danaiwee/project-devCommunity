@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -53,9 +52,6 @@ interface SeachParams {
 }
 
 const Home = async ({ searchParams }: SeachParams) => {
-  const session = await auth();
-  console.log(session);
-
   const { query = "" } = await searchParams;
 
   const filterQuestions = questions.filter((question) =>
