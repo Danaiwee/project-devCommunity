@@ -1,39 +1,46 @@
 import { NextResponse } from "next/server";
 
-interface Tag {
-  _id: string;
-  name: string;
-}
+declare global {
+  interface Tag {
+    _id: string;
+    name: string;
+  }
 
-interface Author {
-  _id: string;
-  name: string;
-  image: string;
-}
+  interface Author {
+    _id: string;
+    name: string;
+    image: string;
+  }
 
-interface Question {
-  _id: string;
-  title: string;
-  tags: Tag[];
-  author: Author;
-  upvotes: number;
-  answers: number;
-  views: number;
-  createdAt: Date;
-}
+  interface Question {
+    _id: string;
+    title: string;
+    tags: Tag[];
+    author: Author;
+    upvotes: number;
+    answers: number;
+    views: number;
+    createdAt: Date;
+  }
 
-type ActionResponse<T = null> = {
-  success: boolean;
-  data?: T;
-  errors?: {
-    message: string;
-    details?: Record<string, string[]>;
+  type ActionResponse<T = null> = {
+    success: boolean;
+    data?: T;
+    errors?: {
+      message: string;
+      details?: Record<string, string[]>;
+    };
+    status?: number;
   };
-  status?: number;
-};
 
-type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
-type ErrorResponse = ActionResponse<undefined> & { success: false };
+  type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+  type ErrorResponse = ActionResponse<undefined> & { success: false };
 
-type APIResponse = NextResponse<SuccessResponse<T> | ErrorResponse>;
-type APIErrorResponse = NextResponse<ErrorResponse>;
+  type APIResponse = NextResponse<SuccessResponse<T> | ErrorResponse>;
+  type APIErrorResponse = NextResponse<ErrorResponse>;
+
+  type RouteParams = {
+    params: Promise<Record<string, string>>;
+    searchParams: Promise<Record<string, string>>;
+  };
+}

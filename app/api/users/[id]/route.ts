@@ -4,8 +4,8 @@ import User from "@/database/user.model";
 import handleError from "@/lib/handler/error";
 import { NotFoundError, ValidationError } from "@/lib/http-error";
 import dbConnect from "@/lib/mongoose";
+
 import { UserSchema } from "@/lib/validations";
-import { APIErrorResponse } from "@/types/global";
 
 // Get user by id
 export async function GET(
