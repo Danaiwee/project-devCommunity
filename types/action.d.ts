@@ -17,7 +17,7 @@ interface AuthCredentials {
 }
 
 interface CreateQuestionParams {
-  title : string;
+  title: string;
   content: string;
   tags: string[];
 }
@@ -28,4 +28,8 @@ interface EditQuestionParams extends CreateQuestionParams {
 
 interface GetQuestionParams {
   questionId: string;
+}
+
+interface GetTagQuestionParams extends Omit<PaginatedSearchParams, "filter"> {
+  tagId: string;
 }
