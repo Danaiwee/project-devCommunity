@@ -5,58 +5,23 @@ import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-
-const questions = [
-  {
-    _id: "1",
-    title: "How to learn React?",
-    content: "I want to learn React, can anyone help me?",
-    tags: [
-      { _id: "1", name: "React" },
-      { _id: "2", name: "JavaScript" },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image:
-        "https://static.vecteezy.com/system/resources/previews/024/183/525/non_2x/avatar-of-a-man-portrait-of-a-young-guy-illustration-of-male-character-in-modern-color-style-vector.jpg",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2024-04-07"),
-  },
-  {
-    _id: "2",
-    title: "How to learn JavaScript?",
-    content: "I want to learn JavaScript, can anyone help me?",
-    tags: [
-      { _id: "1", name: "React" },
-      { _id: "2", name: "JavaScript" },
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image:
-        "https://png.pngtree.com/png-vector/20220817/ourmid/pngtree-women-cartoon-avatar-in-flat-style-png-image_6110776.png",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2023-05-15"),
-  },
-];
+import { getQuestions } from "@/lib/actions/question.action";
 
 interface SeachParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SeachParams) => {
-  const { query = "" } = await searchParams;
+  const { page, pageSize, query, filter } = await searchParams;
 
-  const filterQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(query?.toLowerCase())
-  );
+  const { success, data, errors } = await getQuestions({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query: query || "",
+    filter: filter || "",
+  });
+
+  const { questions } = data || {};
 
   return (
     <>
@@ -84,11 +49,23 @@ const Home = async ({ searchParams }: SeachParams) => {
         <HomeFilters />
       </section>
 
-      <section className="mt-10 flex w-full flex-col gap-6">
-        {filterQuestions.map((question) => (
-          <QuestionCard key={question._id} question={question} />
-        ))}
-      </section>
+      {success ? (
+        <section className="mt-10 flex w-full flex-col gap-6">
+          {questions && questions.length > 0 ? (
+            questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
+            ))
+          ) : (
+            <p className="text-dark400_light700">No questions found</p>
+          )}
+        </section>
+      ) : (
+        <section className="mt-10 flex w-full items-center jsutify-center">
+          <p className="text-dark400_light700">
+            {errors?.message || "Failed to fetch questions"}
+          </p>
+        </section>
+      )}
     </>
   );
 };
