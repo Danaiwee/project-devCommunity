@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
+import DataRenderer from "@/components/DataRenderer";
 import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
 
 interface SeachParams {
@@ -49,23 +51,19 @@ const Home = async ({ searchParams }: SeachParams) => {
         <HomeFilters />
       </section>
 
-      {success ? (
-        <section className="mt-10 flex w-full flex-col gap-6">
-          {questions && questions.length > 0 ? (
-            questions.map((question) => (
+      <DataRenderer
+        success={success}
+        errors={errors}
+        data={questions}
+        empty={EMPTY_QUESTION}
+        render={(questions) => (
+          <section className="mt-10 flex w-full flex-col gap-6">
+            {questions.map((question) => (
               <QuestionCard key={question._id} question={question} />
-            ))
-          ) : (
-            <p className="text-dark400_light700">No questions found</p>
-          )}
-        </section>
-      ) : (
-        <section className="mt-10 flex w-full items-center jsutify-center">
-          <p className="text-dark400_light700">
-            {errors?.message || "Failed to fetch questions"}
-          </p>
-        </section>
-      )}
+            ))}
+          </section>
+        )}
+      />
     </>
   );
 };
