@@ -73,7 +73,9 @@ export async function getTags(
 
 export async function getTagQuestions(
   params: GetTagQuestionParams
-): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
+): Promise<
+  ActionResponse<{ questions: Question[]; tag: Tag; isNext: boolean }>
+> {
   const validationResult = await action({
     params,
     schema: GetTagQuestionsSchema,
@@ -114,7 +116,11 @@ export async function getTagQuestions(
 
     return {
       success: true,
-      data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+      data: {
+        questions: JSON.parse(JSON.stringify(questions)),
+        tag: JSON.parse(JSON.stringify(tag)),
+        isNext,
+      },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
