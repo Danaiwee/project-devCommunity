@@ -9,6 +9,7 @@ import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import AnswerForm from "@/components/forms/AnswerForm";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -63,7 +64,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric
           imageUrl="/icons/message.svg"
           alt="message icon"
-          value={answers}
+          value={`${answers} Answers`}
           title=""
           textStyles="small-regular text-dark400_light700"
         />
@@ -71,7 +72,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric
           imageUrl="/icons/eye.svg"
           alt="eye icon"
-          value={formatNumber(views)}
+          value={`${formatNumber(views)} Views`}
           title=""
           textStyles="small-regular text-dark400_light700"
         />
@@ -88,6 +89,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             compact
           />
         ))}
+      </section>
+
+      <section className='my-5'>
+        <AnswerForm />
       </section>
     </>
   );
