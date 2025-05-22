@@ -5,19 +5,27 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validations";
 
 import { Button } from "../ui/button";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
 
 const Editor = dynamic(() => import("../editor"));
 
-const AnswerForm = () => {
-  const [isSubmiting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -30,16 +38,32 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+
+      if (result.success) {
+        form.reset();
+
+        toast("Success", {
+          description: "Created Answer successfully",
+        });
+      } else {
+        toast(`Error ${result.status}`, {
+          description: result.errors?.message,
+        });
+      }
+    });
   };
 
   return (
-    <div>
+    <>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </h4>
-
         <Button
           className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
           disabled={isAISubmitting}
@@ -63,7 +87,6 @@ const AnswerForm = () => {
           )}
         </Button>
       </div>
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -81,28 +104,26 @@ const AnswerForm = () => {
                     fieldChange={field.onChange}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
 
           <div className="flex justify-end">
-            <Button
-              type="submit"
-              className="primary-gradient w-fit text-dark400_light900"
-            >
-              {isSubmiting ? (
+            <Button type="submit" className="primary-gradient w-fit">
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...
                 </>
               ) : (
-                "Post Answer"
+                <p className="text-dark400_light900">Post Answer</p>
               )}
             </Button>
           </div>
         </form>
       </Form>
-    </div>
+    </>
   );
 };
 

@@ -12,6 +12,7 @@ import { z } from "zod";
 
 import ROUTES from "@/constants/routes";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
+import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
 import { Button } from "../ui/button";
@@ -25,8 +26,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-import { AskQuestionSchema } from "@/lib/validations";
-
 const Editor = dynamic(() => import("../editor"), { ssr: false });
 
 interface Params {
@@ -34,7 +33,7 @@ interface Params {
   isEdit?: boolean;
 }
 
-const QuestionForm = ({question, isEdit = false}: Params) => {
+const QuestionForm = ({ question, isEdit = false }: Params) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTransition] = useTransition();
@@ -92,23 +91,22 @@ const QuestionForm = ({question, isEdit = false}: Params) => {
 
   const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
-      if(isEdit && question) {
+      if (isEdit && question) {
         const result = await editQuestion({
           questionId: question._id,
-          ...data
+          ...data,
         });
 
-        if(result.success) {
+        if (result.success) {
           toast("Success", {
-            description: "Updated question successfully."
+            description: "Updated question successfully.",
           });
 
-          if(result.data) router.push(ROUTES.QUESTION(question._id));
-
+          if (result.data) router.push(ROUTES.QUESTION(question._id));
         } else {
           toast(`Error ${result.status}`, {
-            description: result.errors?.message
-          })
+            description: result.errors?.message,
+          });
         }
 
         return;

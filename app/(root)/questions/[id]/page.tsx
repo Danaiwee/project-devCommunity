@@ -4,12 +4,12 @@ import { after } from "next/server";
 
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
+import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
-import AnswerForm from "@/components/forms/AnswerForm";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -91,8 +91,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </section>
 
-      <section className='my-5'>
-        <AnswerForm />
+      <section className="my-5">
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );
