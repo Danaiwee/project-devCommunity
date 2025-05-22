@@ -5,6 +5,7 @@ const ROUTES = {
   ASK_QUESTION: "/ask-question",
   SIGN_IN_WITH_OAUTH: "sign-in-with-oauth",
   COLLECTION: "/collection",
+  COMMUNITY: "/community",
   TAGS: "/tags",
   JOBS: "jobs",
   QUESTION: (id: string) => `/questions/${id}`,
