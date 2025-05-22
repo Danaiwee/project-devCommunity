@@ -60,4 +60,9 @@ declare global {
     content: string;
     createdAt: Date;
   }
+
+  interface HasVotedResponse {
+    hasupVoted: boolean;
+    hasdownVoted: boolean;
+  }
 }

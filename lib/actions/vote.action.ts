@@ -6,7 +6,12 @@ import { Answer, Question, Vote } from "@/database";
 
 import action from "../handler/action";
 import handleError from "../handler/error";
-import { CreateVoteCountSchema, UpdateVoteCountSchema } from "../validations";
+import { NotFoundError } from "../http-error";
+import {
+  CreateVoteCountSchema,
+  HasVotedSchema,
+  UpdateVoteCountSchema,
+} from "../validations";
 
 export async function updateVoteCount(
   params: UpdateVoteParams,
@@ -135,5 +140,42 @@ export async function CreateVoteCount(
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();
+  }
+}
+
+export async function HasVoted(
+  params: HasVotedParams
+): Promise<ActionResponse<HasVotedResponse>> {
+  const validationResult = await action({
+    params,
+    schema: HasVotedSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { targetId, targetType } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  try {
+    const vote = await Vote.findOne({
+      actionId: targetId,
+      author: userId,
+      actionType: targetType,
+    });
+
+    if (!vote) throw new NotFoundError("Vote");
+
+    return {
+      success: true,
+      data: {
+        hasupVoted: vote.voteType === "upvote",
+        hasdownVoted: vote.voteType === "downvote",
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 }
