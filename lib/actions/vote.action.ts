@@ -8,7 +8,6 @@ import { Answer, Question, Vote } from "@/database";
 
 import action from "../handler/action";
 import handleError from "../handler/error";
-import { NotFoundError } from "../http-error";
 import {
   CreateVoteCountSchema,
   HasVotedSchema,
@@ -169,7 +168,15 @@ export async function hasVoted(
       actionType: targetType,
     });
 
-    if (!vote) throw new NotFoundError("Vote");
+    if (!vote) {
+      return {
+        success: false,
+        data: {
+          hasupVoted: false,
+          hasdownVoted: false,
+        },
+      };
+    }
 
     return {
       success: true,
