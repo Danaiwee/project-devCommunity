@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
@@ -18,14 +19,16 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   const { success, data: question } = await getQuestion({ questionId: id });
   if (!success || !question) return redirect("/404");
 
-  const { success: AnsweredSuccess, data: answersData } = await GetAnswers({
+  const {
+    success: AnsweredSuccess,
+    data: answersData,
+    errors: answersError,
+  } = await GetAnswers({
     page: 1,
     pageSize: 5,
     questionId: id,
     filter: "newest",
   });
-
-  console.log(answersData);
 
   const { author, createdAt, answers, views, tags, title, content } = question;
 
@@ -99,6 +102,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             compact
           />
         ))}
+      </section>
+
+      <section className="my-5">
+        <AllAnswers
+          data={answersData?.answers}
+          success={AnsweredSuccess}
+          errors={answersError}
+          totalAnswers={answersData?.totalAnswers || 0}
+        />
       </section>
 
       <section className="my-5">
