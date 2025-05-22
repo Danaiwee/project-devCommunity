@@ -2,12 +2,26 @@ import Link from "next/link";
 import React from "react";
 
 import ROUTES from "@/constants/routes";
-
-import UserAvatar from "../UserAvatar";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { getTimeStamp } from "@/lib/utils";
-import Preview from "../editor/Preview";
 
-const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
+import Preview from "../editor/Preview";
+import UserAvatar from "../UserAvatar";
+import Votes from "../votes/Votes";
+
+const AnswerCard = ({
+  _id,
+  author,
+  content,
+  createdAt,
+  upvotes,
+  downvotes,
+}: Answer) => {
+  const hasVotedPromise = hasVoted({
+    targetId: _id,
+    targetType: "answer",
+  });
+
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -29,15 +43,21 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
               {author.name ?? "Anonymous"}
             </p>
 
-            <p className='small-regular text-light400_light500 ml-0.5 line-clamp-1'>
-              <span className='max-sm:hidden'> • </span>
+            <p className="small-regular text-light400_light500 ml-0.5 line-clamp-1">
+              <span className="max-sm:hidden"> • </span>
               answered {getTimeStamp(createdAt)}
             </p>
           </Link>
         </div>
 
-        <div className='flex justify-end'>
-          Votes
+        <div className="flex justify-end">
+          <Votes 
+            upvotes={upvotes} 
+            downvotes={downvotes} 
+            hasVotedPromise={hasVotedPromise}
+            targetId={_id}
+            targetType="answer"
+            />
         </div>
       </div>
 
