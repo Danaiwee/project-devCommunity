@@ -163,3 +163,15 @@ export const createAnswerSchema = AnswerSchema.extend({
 export const GetAnswersSchema = PaginatedSearchParamsSchema.extend({
   questionId: z.string().min(1, { message: "Question ID is required." }),
 });
+
+export const CreateVoteCountSchema = z.object({
+  targetId: z.string().min(1, { message: "Target ID is required." }),
+  targetType: z.enum(["question", "answer"], {
+    message: "Invalid target type.",
+  }),
+  voteType: z.enum(["upvote", "downvote"], { message: "Invalid vote type." }),
+});
+
+export const UpdateVoteCountSchema = CreateVoteCountSchema.extend({
+  change: z.number().int().min(-1).max(1),
+});
