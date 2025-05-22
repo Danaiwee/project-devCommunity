@@ -13,6 +13,7 @@ import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { GetAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQustion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
@@ -37,6 +38,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   const hasVotedPromise = hasVoted({
     targetId: question._id,
     targetType: "question",
+  });
+
+  const hasSavedQustionPromise = hasSavedQustion({
+    questionId: question._id,
   });
 
   const {
@@ -87,7 +92,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Suspense>
 
             <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={question._id} />
+              <SaveQuestion
+                questionId={question._id}
+                hasSavedQuestionPromise={hasSavedQustionPromise}
+              />
             </Suspense>
           </div>
         </div>

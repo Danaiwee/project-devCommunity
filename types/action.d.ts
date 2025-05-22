@@ -62,3 +62,4 @@ type HasVotedParams = Pick<CreateVoteParams, "targetId" | "targetType">;
 interface CollectionBaseParams {
   questionId: string;
 }
+
