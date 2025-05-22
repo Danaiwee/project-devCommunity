@@ -8,6 +8,7 @@ import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { GetAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
@@ -30,7 +31,17 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     filter: "newest",
   });
 
-  const { author, createdAt, answers, views, tags, title, content } = question;
+  const {
+    author,
+    createdAt,
+    answers,
+    views,
+    tags,
+    title,
+    content,
+    upvotes,
+    downvotes,
+  } = question;
 
   after(async () => {
     await incrementViews({ questionId: id });
@@ -56,7 +67,12 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           </div>
 
           <div className="flex justify-end items-center">
-            <p>Votes</p>
+            <Votes
+              upvotes={upvotes}
+              downvotes={downvotes}
+              hasupVoted={true}
+              hasdownVoted={false}
+            />
           </div>
         </div>
 
