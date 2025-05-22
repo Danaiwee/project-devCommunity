@@ -105,7 +105,7 @@ export async function hasSavedQustion(
 
 export async function getSavedQuestions(
   params: PaginatedSearchParams
-): Promise<ActionResponse<{ collection: Collection[]; isNext: boolean }>> {
+): Promise<ActionResponse<{ collections: Collection[]; isNext: boolean }>> {
   const validationResult = await action({
     params,
     schema: PaginatedSearchParamsSchema,
@@ -157,7 +157,7 @@ export async function getSavedQuestions(
       { $unwind: "$question.author" },
       {
         $lookup: {
-          from: "tag",
+          from: "tags",
           localField: "question.tags",
           foreignField: "_id",
           as: "question.tags",
@@ -176,10 +176,12 @@ export async function getSavedQuestions(
       });
     }
 
-    const [totalCount] = await Collection.aggregate([
+    const [totalCountResults] = await Collection.aggregate([
       ...pipeline,
       { $count: "count" },
     ]);
+
+    const totalCount = totalCountResults?.count || 0;
 
     pipeline.push({ $sort: sortCriteria }, { $skip: skip }, { $limit: limit });
     pipeline.push({ $project: { question: 1, author: 1 } });
@@ -191,7 +193,7 @@ export async function getSavedQuestions(
     return {
       success: true,
       data: {
-        collection: JSON.parse(JSON.stringify(questions)),
+        collections: JSON.parse(JSON.stringify(questions)),
         isNext,
       },
     };

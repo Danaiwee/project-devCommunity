@@ -15,7 +15,6 @@ const QuestionCard = ({
   question: {
     _id,
     title,
-    content,
     tags,
     author,
     createdAt,
