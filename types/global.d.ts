@@ -51,6 +51,12 @@ declare global {
     query?: string;
     filter?: string;
     sort?: string;
+  }
 
+  interface Answer {
+    _id: string;
+    author: Author;
+    content: string;
+    createdAt: Date;
   }
 }
