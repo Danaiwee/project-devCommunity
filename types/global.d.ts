@@ -62,6 +62,7 @@ declare global {
     createdAt: Date;
     upvotes: number;
     downvotes: number;
+    question: string;
   }
 
   interface HasVotedResponse {

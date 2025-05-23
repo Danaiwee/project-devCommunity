@@ -9,6 +9,11 @@ import Preview from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
 import Votes from "../votes/Votes";
 
+interface AnswerCardProps extends Answer {
+  containerClasses?: string;
+  showReadmore?: boolean;
+}
+
 const AnswerCard = ({
   _id,
   author,
@@ -16,14 +21,17 @@ const AnswerCard = ({
   createdAt,
   upvotes,
   downvotes,
-}: Answer) => {
+  question,
+  containerClasses,
+  showReadmore
+}: AnswerCardProps) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
     targetType: "answer",
   });
 
   return (
-    <article className="light-border border-b py-10">
+    <article className={`light-border border-b py-10 ${containerClasses}`}>
       <span id={JSON.stringify(_id)} className="hash-span" />
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
@@ -62,6 +70,15 @@ const AnswerCard = ({
       </div>
 
       <Preview content={content} />
+
+      {showReadmore && (
+        <Link 
+          href={`/questions/${question}#answer-${_id}`}
+          className='body-semibold relative z-10 font-space-grotesk text-primary-500'
+        >
+          <p className='mt-1'>Read more...</p>
+        </Link>
+      )}
     </article>
   );
 };

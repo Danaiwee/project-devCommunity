@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/Pagination";
@@ -11,8 +12,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserAvatar from "@/components/UserAvatar";
 import ProfileLink from "@/components/users/ProfileLink";
 import Stats from "@/components/users/Stats";
-import { EMPTY_QUESTION } from "@/constants/states";
-import { getUser, getUserQuestion } from "@/lib/actions/user.action";
+import { EMPTY_ANSWERS, EMPTY_QUESTION } from "@/constants/states";
+import {
+  getUser,
+  getUserAnswers,
+  getUserQuestion,
+} from "@/lib/actions/user.action";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
@@ -47,6 +52,18 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   });
 
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
+
+  const {
+    success: userAnswersSuccess,
+    data: userAnswers,
+    errors: userAnswersError,
+  } = await getUserAnswers({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    userId: id,
+  });
+
+  const { answers, isNext: hasMoreAnswers } = userAnswers!;
   return (
     <>
       <section className="flex flex-col-reverse items-start jusity-between sm:flex-row">
@@ -147,7 +164,27 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             value="answers"
             className="mt-5 flex w-full flex-col gap-6"
           >
-            Lists of Answers
+            <DataRenderer
+              success={userAnswersSuccess}
+              data={answers}
+              errors={userAnswersError}
+              empty={EMPTY_ANSWERS}
+              render={(answers) => (
+                <div className="w-full flex flex-col gap-6">
+                  {answers.map((answer) => (
+                    <AnswerCard
+                      key={answer._id}
+                      {...answer}
+                      content={answer.content.slice(0, 27)}
+                      containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
+                      showReadmore
+                    />
+                  ))}
+                </div>
+              )}
+            />
+
+            <Pagination page={page} isNext={hasMoreAnswers || false} />
           </TabsContent>
         </Tabs>
 
