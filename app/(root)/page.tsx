@@ -4,6 +4,7 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilters from "@/components/filters/CommonFilters";
 import HomeFilters from "@/components/filters/HomeFilters";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
@@ -25,7 +26,7 @@ const Home = async ({ searchParams }: SeachParams) => {
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -72,6 +73,8 @@ const Home = async ({ searchParams }: SeachParams) => {
           </section>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

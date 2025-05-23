@@ -3,6 +3,7 @@ import React from "react";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilters from "@/components/filters/CommonFilters";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { TagFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
@@ -20,7 +21,7 @@ const TagQuestion = async ({ params, searchParams }: RouteParams) => {
     tagId: id,
   });
 
-  const { tag, questions } = data || {};
+  const { tag, questions, isNext } = data || {};
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -56,6 +57,8 @@ const TagQuestion = async ({ params, searchParams }: RouteParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

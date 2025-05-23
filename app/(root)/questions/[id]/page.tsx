@@ -18,8 +18,10 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
+
+  const { page, pageSize, filter } = await searchParams;
 
   const { success, data: question } = await getQuestion({ questionId: id });
   if (!success || !question) return redirect("/404");
@@ -29,10 +31,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     data: answersData,
     errors: answersError,
   } = await GetAnswers({
-    page: 1,
-    pageSize: 5,
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 5,
     questionId: id,
-    filter: "newest",
+    filter: filter || "popular",
   });
 
   const hasVotedPromise = hasVoted({
@@ -146,6 +148,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
       <section className="my-5">
         <AllAnswers
+          page={page}
+          isNext={answersData?.isNext || false}
           data={answersData?.answers}
           success={AnsweredSuccess}
           errors={answersError}

@@ -45,7 +45,7 @@ export async function createAnswer(
       { session }
     );
 
-    question.answer += 1;
+    question.answers += 1;
 
     await question.save({ session });
 
