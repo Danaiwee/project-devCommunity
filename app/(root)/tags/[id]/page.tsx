@@ -2,7 +2,9 @@ import React from "react";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilters from "@/components/filters/CommonFilters";
 import LocalSearch from "@/components/search/LocalSearch";
+import { TagFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.action";
@@ -27,12 +29,17 @@ const TagQuestion = async ({ params, searchParams }: RouteParams) => {
         </h1>
       </section>
 
-      <section className="mt-11">
+      <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route={ROUTES.TAG(id)}
           imageSrc="/icons/search.svg"
           placeholder="Search questions..."
           otherClasses="flex-1"
+        />
+
+        <CommonFilters
+          filters={TagFilters}
+          otherClasses="min-h-[56px] max-md:w-full sm:min-w-[170px]"
         />
       </section>
 
