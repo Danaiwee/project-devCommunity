@@ -27,7 +27,7 @@ const StatsCard = ({ imageUrl, value, title }: StatsCardProps) => (
 
 const Stats = ({ totalQuestions, totalAnswers, badges }: Props) => {
   return (
-    <div className="mt-3">
+    <div className="mt-8">
       <h4 className="h2-semibold text-dark200_light900">Stats</h4>
 
       <div className="mt-5 grid grd-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">

@@ -94,4 +94,6 @@ declare global {
     SILVER: number;
     BRONZE: number;
   }
+
+  
 }
