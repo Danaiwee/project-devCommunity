@@ -126,3 +126,16 @@ export async function getTagQuestions(
     return handleError(error) as ErrorResponse;
   }
 }
+
+export async function getTopTags(): Promise<ActionResponse<Tag[]>> {
+  try {
+    const tags = await Tag.find().sort({ questions: -1 }).limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(tags)),
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
