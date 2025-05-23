@@ -86,4 +86,6 @@ declare global {
     author: string | Author;
     question: Question;
   }
+
+  
 }
