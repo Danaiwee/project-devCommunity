@@ -2,9 +2,11 @@ import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
+import CommonFilters from "@/components/filters/CommonFilters";
 import HomeFilters from "@/components/filters/HomeFilters";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
+import { HomePageFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
@@ -38,12 +40,18 @@ const Home = async ({ searchParams }: SeachParams) => {
         </Button>
       </section>
 
-      <section className="mt-11">
+      <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route="/"
           placeholder="Search Questions..."
           imageSrc="/icons/search.svg"
           otherClasses="flex-1"
+        />
+
+        <CommonFilters
+          filters={HomePageFilters}
+          otherClasses="min-h-[40px] sm:min-w-[170px] w-full"
+          containerClasses="hidden max-md:flex"
         />
       </section>
 
