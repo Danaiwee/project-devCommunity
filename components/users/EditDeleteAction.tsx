@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import { deleteQuestion } from "@/lib/actions/question.action";
 
 import {
   AlertDialog,
@@ -26,7 +29,21 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
   const handleEdit = () => {
     router.push(`/questions/${itemId}/edit`);
   };
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    if (type === "question") {
+      const { success, errors } = await deleteQuestion({ questionId: itemId });
+
+      if (success) {
+        return toast("Success", {
+          description: "Deleted Question successfully",
+        });
+      } else {
+        return toast("Error", {
+          description: errors?.message || "An error occurred while deleting.",
+        });
+      }
+    }
+  };
 
   return (
     <div
