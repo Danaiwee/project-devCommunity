@@ -3,13 +3,17 @@ import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 
 import ROUTES from "@/constants/routes";
-import { Question } from "@/database";
+import { Question, Vote } from "@/database";
 import Answer, { IAnswerDoc } from "@/database/answer.model";
 
 import action from "../handler/action";
 import handleError from "../handler/error";
 import { NotFoundError } from "../http-error";
-import { createAnswerSchema, GetAnswersSchema } from "../validations";
+import {
+  createAnswerSchema,
+  DeleteAnswerSchema,
+  GetAnswersSchema,
+} from "../validations";
 
 export async function createAnswer(
   params: CreateAnswerParams
@@ -129,5 +133,59 @@ export async function GetAnswers(
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function DeleteAnswer(
+  params: DeleteAnswerParams
+): Promise<ActionResponse> {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { answerId } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const answer = await Answer.findById(answerId).session(session);
+
+    if (!answer) throw new NotFoundError("Answer");
+
+    if (answer.author.toString() !== userId)
+      throw new Error("Unauthorized user.");
+
+    await Question.updateOne(
+      { _id: answer.question },
+      { $inc: { answers: -1 } },
+      { session }
+    );
+
+    await Vote.deleteMany({
+      actionId: answerId,
+      actionType: "answer",
+    }).session(session);
+
+    await Answer.findByIdAndDelete(answerId).session(session);
+
+    await session.commitTransaction();
+
+    revalidatePath(`/profile/${userId}`);
+
+    return { success: true };
+  } catch (error) {
+    await session.abortTransaction();
+
+    return handleError(error) as ErrorResponse;
+  } finally {
+    await session.endSession();
   }
 }

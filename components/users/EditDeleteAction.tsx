@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
+import { DeleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 
 import {
@@ -43,6 +44,22 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
         });
       }
     }
+
+    if (type === "answer") {
+      const { success, errors } = await DeleteAnswer({ answerId: itemId });
+
+      if (success) {
+        return toast("Success", {
+          description: "Deleted answer successfully",
+        });
+      } else {
+        return toast("Error", {
+          description: errors?.message || "An error occurred while deleting.",
+        });
+      }
+    }
+
+    return null;
   };
 
   return (
