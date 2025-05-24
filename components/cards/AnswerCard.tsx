@@ -7,11 +7,13 @@ import { getTimeStamp } from "@/lib/utils";
 
 import Preview from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
+import EditDeleteAction from "../users/EditDeleteAction";
 import Votes from "../votes/Votes";
 
 interface AnswerCardProps extends Answer {
   containerClasses?: string;
   showReadmore?: boolean;
+  showActionBtns?: boolean;
 }
 
 const AnswerCard = ({
@@ -24,6 +26,7 @@ const AnswerCard = ({
   question,
   containerClasses,
   showReadmore,
+  showActionBtns,
 }: AnswerCardProps) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
@@ -58,7 +61,7 @@ const AnswerCard = ({
           </Link>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-5">
           <Votes
             upvotes={upvotes}
             downvotes={downvotes}
@@ -66,6 +69,8 @@ const AnswerCard = ({
             targetId={_id}
             targetType="answer"
           />
+
+          {showActionBtns && <EditDeleteAction type="answer" itemId={_id} />}
         </div>
       </div>
 
