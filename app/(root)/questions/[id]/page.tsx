@@ -65,7 +65,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
 
   return (
     <>
-      <section className="flex-start w-full flex-col">
+      <div className="flex-start w-full flex-col">
         <div className="flex w-full flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
             <UserAvatar
@@ -105,9 +105,9 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
           {title}
         </h2>
-      </section>
+      </div>
 
-      <section className="mb-8 mt-5 flex flex-wrap gap-4">
+      <div className="mb-8 mt-5 flex flex-wrap gap-4">
         <Metric
           imageUrl="/icons/clock.svg"
           alt="clock icon"
@@ -131,11 +131,11 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           title=""
           textStyles="small-regular text-dark400_light700"
         />
-      </section>
+      </div>
 
       <Preview content={content} />
 
-      <section className="mt-8 flex flex-wrap gap-2">
+      <div className="mt-8 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <TagCard
             key={tag._id}
@@ -144,7 +144,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
             compact
           />
         ))}
-      </section>
+      </div>
 
       <section className="my-5">
         <AllAnswers
@@ -157,7 +157,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
         />
       </section>
 
-      <section className="my-5">
+      <section className="my-5 w-full">
         <AnswerForm questionId={question._id} />
       </section>
     </>

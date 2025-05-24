@@ -62,3 +62,25 @@
   --basePageBg: black;
   background: var(--basePageBg);
 }
+
+/* Force text color inside the editor for dark mode */
+.dark .dark-editor,
+.dark .dark-editor * {
+  color: var(--baseText) !important;
+  background-color: transparent !important;
+}
+
+/* Specifically for CodeMirror editor content */
+.dark .dark-editor .cm-content,
+.dark .dark-editor .cm-line,
+.dark .dark-editor .cm-scroller,
+.dark .dark-editor .cm-editor {
+  color: var(--baseText) !important;
+  background-color: transparent !important;
+}
+
+/* Placeholder text styling */
+.dark .dark-editor ::placeholder {
+  color: var(--baseText);
+  opacity: 0.5;
+}

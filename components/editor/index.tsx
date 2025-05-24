@@ -46,7 +46,7 @@ const Editor = ({ editorRef, value, fieldChange, ...props }: Props) => {
 
   return (
     <MDXEditor
-      key={resolvedTheme}
+      {...props}
       markdown={value}
       onChange={fieldChange}
       ref={editorRef}

@@ -25,6 +25,8 @@ import {
 const Editor = dynamic(() => import("../editor"));
 
 const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [editorKey, setEditorKey] = useState(0);
+
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
 
@@ -45,11 +47,17 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
       });
 
       if (result.success) {
-        form.reset();
+        form.reset({ content: "" });
+
+        setEditorKey((prev) => prev + 1);
 
         toast("Success", {
           description: "Created Answer successfully",
         });
+
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast(`Error ${result.status}`, {
           description: result.errors?.message,
@@ -90,7 +98,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="mt-6 flex w-full flex-col gap-10"
+          className="mt-6 flex w-full flex-col gap-10 relative z-50"
         >
           <FormField
             control={form.control}
@@ -99,6 +107,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
               <FormItem className="flex w-full flex-col gap-3">
                 <FormControl className="mt-3.5">
                   <Editor
+                    key={editorKey}
                     value={field.value}
                     editorRef={editorRef}
                     fieldChange={field.onChange}
