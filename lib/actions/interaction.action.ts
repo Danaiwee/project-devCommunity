@@ -11,7 +11,7 @@ import action from "../handler/action";
 import handleError from "../handler/error";
 import { CreateInteractionSchema } from "../validations";
 
-export async function CreateInteraction(
+export async function createInteraction(
   params: CreateInteractionParams
 ): Promise<ActionResponse<IInteractionDoc>> {
   const validationResult = await action({

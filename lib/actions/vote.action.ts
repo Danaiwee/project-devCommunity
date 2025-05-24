@@ -2,9 +2,15 @@
 
 import mongoose, { ClientSession } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import ROUTES from "@/constants/routes";
 import { Answer, Question, Vote } from "@/database";
+import {
+  UpdateVoteParams,
+  CreateVoteParams,
+  HasVotedParams,
+} from "@/types/action";
 
 import action from "../handler/action";
 import handleError from "../handler/error";
@@ -13,6 +19,7 @@ import {
   HasVotedSchema,
   UpdateVoteCountSchema,
 } from "../validations";
+import { createInteraction } from "./interaction.action";
 
 export async function updateVoteCount(
   params: UpdateVoteParams,
@@ -67,10 +74,21 @@ export async function createVoteCount(
   const { targetId, targetType, voteType } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
+  if (!userId) {
+    return handleError(new Error("Ubauthorized")) as ErrorResponse;
+  }
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
+    const Model = targetType === "question" ? Question : Answer;
+
+    const contentDoc = await Model.findById(targetId).session(session);
+    if (!contentDoc) throw new Error("Content not found.");
+
+    const contentAuthorId = contentDoc.author.toString();
+
     const existingVote = await Vote.findOne({
       actionId: targetId,
       actionType: targetType,
@@ -130,6 +148,15 @@ export async function createVoteCount(
         session
       );
     }
+
+    after(async () => {
+      await createInteraction({
+        action: voteType,
+        actionId: targetId,
+        actionTarget: targetType,
+        authorId: contentAuthorId,
+      });
+    });
 
     await session.commitTransaction();
 
