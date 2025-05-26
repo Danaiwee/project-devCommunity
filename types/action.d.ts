@@ -122,10 +122,13 @@ interface RecommendationParams {
   limit: number;
 }
 
-
-
 interface GetJobParams {
   query: string;
   filter: string;
   page: number;
+}
+
+interface GlobalSearchParams {
+  query: string;
+  type: string | null;
 }

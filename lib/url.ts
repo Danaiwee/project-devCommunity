@@ -3,7 +3,7 @@ import qs from "query-string";
 interface UrlQueryParams {
   params: string;
   key: string;
-  value: string;
+  value: string | null;
 }
 
 interface RemoveUrlQueryParams {
@@ -32,8 +32,11 @@ export const removeKeysFromUrlQuery = ({
     delete queryString[key];
   });
 
-  return qs.stringifyUrl({
-    url: window.location.pathname,
-    query: queryString
-  }, {skipNull: true})
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: queryString,
+    },
+    { skipNull: true }
+  );
 };

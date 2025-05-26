@@ -104,18 +104,22 @@ declare global {
   }
 
   interface Job {
-  job_id?: string;
-  employer_name?: string;
-  employer_logo?: string | undefined;
-  employer_website?: string;
-  job_employment_type?: string;
-  job_title?: string;
-  job_description?: string;
-  job_apply_link?: string;
-  job_city?: string;
-  job_state?: string;
-  job_country?: string;
-}
+    job_id?: string;
+    employer_name?: string;
+    employer_logo?: string | undefined;
+    employer_website?: string;
+    job_employment_type?: string;
+    job_title?: string;
+    job_description?: string;
+    job_apply_link?: string;
+    job_city?: string;
+    job_state?: string;
+    job_country?: string;
+  }
 
-
+  interface GlobalSearchItem {
+    id: string;
+    type: "question" | "answer" | "user" | "tag";
+    title: string;
+  }
 }

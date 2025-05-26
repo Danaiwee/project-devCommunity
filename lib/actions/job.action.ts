@@ -1,3 +1,5 @@
+"use server";
+
 import { GetJobParams } from "@/types/action";
 
 import handleError from "../handler/error";
