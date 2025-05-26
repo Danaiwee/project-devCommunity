@@ -38,7 +38,7 @@ interface StateSkeletonProps {
   };
 }
 
-const StateSkeleton = ({
+export const StateSkeleton = ({
   image,
   title,
   message,

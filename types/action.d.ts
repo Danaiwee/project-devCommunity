@@ -121,3 +121,11 @@ interface RecommendationParams {
   skip: number;
   limit: number;
 }
+
+
+
+interface GetJobParams {
+  query: string;
+  filter: string;
+  page: number;
+}
