@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import TagCard from "@/components/cards/TagCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilters from "@/components/filters/CommonFilters";
@@ -7,6 +9,12 @@ import { TagFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_TAGS } from "@/constants/states";
 import { getTags } from "@/lib/actions/tag.action";
+
+export const metadata: Metadata = {
+  title: "Dev Community | Browse Tags",
+  description:
+    "Discover all the tags developers use on Dev Community. Explore topics by category, see how many questions each tag has, and find content that matches your interests.",
+};
 
 const Tags = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
@@ -32,7 +40,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
           otherClasses="flex-1"
         />
 
-        <CommonFilters 
+        <CommonFilters
           filters={TagFilters}
           otherClasses="min-h-[56px] max-md:w-full sm:min-w-[170px]"
         />

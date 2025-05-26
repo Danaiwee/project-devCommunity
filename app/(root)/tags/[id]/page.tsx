@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import React from "react";
 
 import QuestionCard from "@/components/cards/QuestionCard";
@@ -9,6 +10,43 @@ import { TagFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.action";
+
+export async function generateMetadata({
+  params,
+  searchParams,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const { page, pageSize, query } = await searchParams;
+
+  const { success, data } = await getTagQuestions({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query,
+    tagId: id,
+  });
+
+  if (!success || !data) {
+    return {
+      title: "Dev Community | Tag",
+      description: "Browse all developer questions tagged",
+    };
+  }
+
+  const { tag } = data!;
+  const formatTagName = (name: string) => {
+    return name
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const tagName = formatTagName(tag.name);
+
+  return {
+    title: `Dev Community | ${tagName}`,
+    description: `Browse all developer questions tagged with "${tagName}" on Dev Community. Find solutions, ask questions, and join discussions around ${tagName}.`,
+  };
+}
 
 const TagQuestion = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;

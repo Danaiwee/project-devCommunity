@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import UserCard from "@/components/cards/UserCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilters from "@/components/filters/CommonFilters";
@@ -7,6 +9,12 @@ import { UserFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_USERS } from "@/constants/states";
 import { getUsers } from "@/lib/actions/user.action";
+
+export const metadata: Metadata = {
+  title: "Dev Community | Meet developers",
+  description:
+    "Explore the Dev Community and connect with developers from around the world. Browse user profiles, discover shared interests, and grow your professional network.",
+};
 
 const Community = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
@@ -31,7 +39,7 @@ const Community = async ({ searchParams }: RouteParams) => {
           otherClasses="flex-1"
         />
 
-        <CommonFilters 
+        <CommonFilters
           filters={UserFilters}
           otherClasses="min-h-[56px] max-md:w-full sm:min-w-[170px]"
         />

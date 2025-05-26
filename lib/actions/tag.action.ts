@@ -1,6 +1,7 @@
 import { FilterQuery } from "mongoose";
 
 import { Question, Tag } from "@/database";
+import { GetTagQuestionParams } from "@/types/action";
 
 import action from "../handler/action";
 import handleError from "../handler/error";

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -21,6 +22,30 @@ import {
   getUserStats,
   getUserTags,
 } from "@/lib/actions/user.action";
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  const { success, data } = await getUser({ userId: id });
+
+  if (!success || !data) {
+    return {
+      title: "Dev Community | Developer profile",
+      description:
+        "View a developer's profile on Dev Community. See their questions, answers, and their special techs",
+    };
+  }
+
+  const { user } = data!;
+  const { name } = user!;
+  return {
+    title: `Dev Community | ${name}`,
+    description:
+      "View a developer's profile on Dev Community. See their questions, answers, and their special techs",
+  };
+}
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;

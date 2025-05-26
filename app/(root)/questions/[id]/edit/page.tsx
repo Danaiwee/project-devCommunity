@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
@@ -5,6 +6,12 @@ import { auth } from "@/auth";
 import QuestionForm from "@/components/forms/QuestionForm";
 import ROUTES from "@/constants/routes";
 import { getQuestion } from "@/lib/actions/question.action";
+
+export const metadata: Metadata = {
+  title: "Dev Community | Edit question",
+  description:
+    "Update and improve your technical questions on Dev Community. Make edits to clarify your post and get better answers from fellow developers.",
+};
 
 const EditQuestion = async ({ params }: RouteParams) => {
   const { id } = await params;

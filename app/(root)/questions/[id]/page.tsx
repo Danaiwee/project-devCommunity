@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
@@ -17,6 +18,29 @@ import { hasSavedQustion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+
+  const { success, data } = await getQuestion({ questionId: id });
+
+  if (!success || !data) {
+    return {
+      title: "Dev Commnunity | Question Details",
+      description:
+        "Read developer questions and community-driven answers on Dev Community. Join the conversation and share your expertise.",
+    };
+  }
+
+  const { title, content } = data!;
+
+  return {
+    title: `Dev Community | ${title}`,
+    description: content.slice(0, 100),
+  };
+}
 
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
