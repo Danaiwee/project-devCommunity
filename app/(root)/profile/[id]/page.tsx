@@ -150,7 +150,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
 
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full am:mt-3">
           {session?.user?.id === id && (
-            <Link href={`/portfolio/${id}/edit`}>
+            <Link href={`/profile/${id}/edit`}>
               <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-12 min-w-30 px-4 py-3 cursoir-pointer">
                 Edit Profile
               </Button>

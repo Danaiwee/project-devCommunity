@@ -229,3 +229,20 @@ export const GlobalSearchSchema = z.object({
   query: z.string(),
   type: z.string().nullable().optional(),
 });
+
+export const UpdateUserSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .max(100, { message: "Name cannot exceed 100 characters long" }),
+  username: z
+    .string()
+    .min(1, { message: "Username is required." })
+    .max(100, { message: "Username cannot exceed 100 characters long." }),
+  portfolio: z
+    .string()
+    .url({ message: "Please provide a valid url." })
+    .optional(),
+  location: z.string().optional(),
+  bio: z.string().optional(),
+});
