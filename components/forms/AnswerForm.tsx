@@ -29,6 +29,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
 
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
 
@@ -66,34 +67,54 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
     });
   };
 
+  const handleAISubmit = () => {
+    setIsAISubmitting(true);
+
+    try {
+      setShowMessage(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsAISubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="paragraph-semibold text-dark400_light800">
           Write your answer here
         </h4>
-        <Button
-          className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-          disabled={isAISubmitting}
-        >
-          {isAISubmitting ? (
-            <>
-              <ReloadIcon className="mr-2 size-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Image
-                src="/icons/stars.svg"
-                alt="Generate AI Answer"
-                width={12}
-                height={12}
-                className="object-contain"
-              />
-              Generate AI Answer
-            </>
+        <div className="flex flex-col">
+          <Button
+            className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
+            disabled={isAISubmitting}
+            onClick={handleAISubmit}
+          >
+            {isAISubmitting ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Image
+                  src="/icons/stars.svg"
+                  alt="Generate AI Answer"
+                  width={12}
+                  height={12}
+                  className="object-contain"
+                />
+                Generate AI Answer
+              </>
+            )}
+          </Button>
+          {showMessage && (
+            <p className="text-xs text-red-700 mt-2">
+              This AI feature is coming soon!!
+            </p>
           )}
-        </Button>
+        </div>
       </div>
       <Form {...form}>
         <form
